@@ -14,28 +14,28 @@ public class GoalManager
     }
 
     public void AddGoal(string goalType, string name, string description, int points, int targetCount = 0, int bonusPoints = 0, DateTime? deadline = null)
-{
-    if (string.IsNullOrWhiteSpace(goalType))
     {
-        throw new ArgumentException("Goal type cannot be empty.");
+        if (string.IsNullOrWhiteSpace(goalType))
+        {
+            throw new ArgumentException("Goal type cannot be empty.");
+        }
+
+        if (points <= 0)
+        {
+            throw new ArgumentException("Points must be greater than zero.");
+        }
+
+        Goal newGoal = goalType switch
+        {
+            "SimpleGoal" => new SimpleGoal(name, description, points),
+            "EternalGoal" => new EternalGoal(name, description, points),
+            "ChecklistGoal" => new ChecklistGoal(name, description, targetCount, points, bonusPoints),
+            "TimeBasedGoal" => new TimeBasedGoal(name, description, points, deadline ?? throw new ArgumentException("Deadline is required for Time-Based Goal")),
+            _ => throw new ArgumentException("Invalid goal type")
+        };
+
+        Goals.Add(newGoal);
     }
-
-    if (points <= 0)
-    {
-        throw new ArgumentException("Points must be greater than zero.");
-    }
-
-    Goal newGoal = goalType switch
-    {
-        "SimpleGoal" => new SimpleGoal(name, description, points),
-        "EternalGoal" => new EternalGoal(name, description, points),
-        "ChecklistGoal" => new ChecklistGoal(name, description, targetCount, points, bonusPoints),
-        "TimeBasedGoal" => new TimeBasedGoal(name, description, points, deadline ?? throw new ArgumentException("Deadline is required for Time-Based Goal")),
-        _ => throw new ArgumentException("Invalid goal type")
-    };
-
-    Goals.Add(newGoal);
-}
 
 
     public void ViewGoals()
