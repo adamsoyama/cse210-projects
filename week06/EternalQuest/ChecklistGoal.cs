@@ -7,6 +7,21 @@ public class ChecklistGoal : Goal
     public ChecklistGoal(string name, string description, int targetCount, int pointsPerCompletion, int bonusPoints) 
         : base(name, description)
     {
+        if (targetCount <= 0)
+        {
+            throw new ArgumentException("Target count must be greater than zero.");
+        }
+
+        if (pointsPerCompletion <= 0)
+        {
+            throw new ArgumentException("Points per completion must be greater than zero.");
+        }
+
+        if (bonusPoints < 0)
+        {
+            throw new ArgumentException("Bonus points cannot be negative.");
+        }
+
         TargetCount = targetCount;
         Points = pointsPerCompletion;
         BonusPoints = bonusPoints;

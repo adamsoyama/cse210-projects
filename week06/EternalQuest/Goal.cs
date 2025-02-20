@@ -7,6 +7,16 @@ public abstract class Goal
 
     public Goal(string name, string description)
     {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("Goal name cannot be empty.");
+        }
+
+        if (string.IsNullOrWhiteSpace(description))
+        {
+            throw new ArgumentException("Goal description cannot be empty.");
+        }
+
         Name = name;
         Description = description;
         Points = 0;

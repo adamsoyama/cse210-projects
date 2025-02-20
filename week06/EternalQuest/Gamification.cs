@@ -16,6 +16,11 @@ public class Gamification
 
     public void AddPoints(int points)
     {
+        if (points <= 0)
+        {
+            throw new ArgumentException("Points to add must be greater than zero.");
+        }
+
         TotalPoints += points;
         CheckLevelUp();
         CheckAchievements();
@@ -23,7 +28,7 @@ public class Gamification
 
     private void CheckLevelUp()
     {
-        if (TotalPoints >= Level * 1000)
+        while (TotalPoints >= Level * 1000)
         {
             Level++;
             Console.WriteLine($"Congratulations! You've leveled up to Level {Level}!");
@@ -32,16 +37,22 @@ public class Gamification
 
     private void CheckAchievements()
     {
-        if (TotalPoints >= 5000 && !Achievements.Contains("High Achiever"))
+        var achievementUnlocks = new Dictionary<int, string>
         {
-            Achievements.Add("High Achiever");
-            Console.WriteLine("Achievement Unlocked: High Achiever!");
-        }
+            { 1000, "Rookie" },
+            { 5000, "High Achiever" },
+            { 10000, "Goal Master" },
+            { 20000, "Champion" },
+            { 50000, "Legend" }
+        };
 
-        if (TotalPoints >= 10000 && !Achievements.Contains("Goal Master"))
+        foreach (var achievement in achievementUnlocks)
         {
-            Achievements.Add("Goal Master");
-            Console.WriteLine("Achievement Unlocked: Goal Master!");
+            if (TotalPoints >= achievement.Key && !Achievements.Contains(achievement.Value))
+            {
+                Achievements.Add(achievement.Value);
+                Console.WriteLine($"Achievement Unlocked: {achievement.Value}!");
+            }
         }
     }
 
